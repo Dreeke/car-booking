@@ -33,7 +33,7 @@ export default function CarRow({
 
   return (
     <div className="contents">
-      <div className="p-2 sm:p-3 bg-gray-50 font-medium text-gray-900 border-b border-r border-gray-200 sticky left-0 z-10">
+      <div className="p-2 sm:p-3 bg-gray-50 dark:bg-gray-800 font-medium text-gray-900 dark:text-white border-b border-r border-gray-200 dark:border-gray-700 sticky left-0 z-10">
         <div className="flex items-center gap-1">
           <span className="text-sm sm:text-base">{car.name}</span>
           {car.has_alert && (
@@ -50,7 +50,7 @@ export default function CarRow({
         return (
           <div
             key={date.toISOString()}
-            className="p-2 border-b border-r border-gray-200 min-h-[80px] hover:bg-gray-50 cursor-pointer"
+            className="p-2 border-b border-r border-gray-200 dark:border-gray-700 min-h-[80px] hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer bg-white dark:bg-gray-900"
             onClick={() => onCellClick(car, date)}
           >
             <div className="space-y-1">

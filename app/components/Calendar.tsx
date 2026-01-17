@@ -98,7 +98,7 @@ export default function Calendar() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-500 dark:text-gray-400">Loading...</div>
       </div>
     )
   }
@@ -116,41 +116,41 @@ export default function Calendar() {
         <div className="flex items-center gap-1 sm:gap-2">
           <button
             onClick={handlePrevWeek}
-            className="px-2 sm:px-3 py-1 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 text-sm"
+            className="px-2 sm:px-3 py-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-50 dark:hover:bg-gray-700 text-sm"
           >
             &larr;
           </button>
           <button
             onClick={handleToday}
-            className="px-2 sm:px-3 py-1 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 text-sm"
+            className="px-2 sm:px-3 py-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-50 dark:hover:bg-gray-700 text-sm"
           >
             Today
           </button>
           <button
             onClick={handleNextWeek}
-            className="px-2 sm:px-3 py-1 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 text-sm"
+            className="px-2 sm:px-3 py-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-50 dark:hover:bg-gray-700 text-sm"
           >
             &rarr;
           </button>
         </div>
-        <div className="text-sm sm:text-lg font-medium text-gray-900">
+        <div className="text-sm sm:text-lg font-medium text-gray-900 dark:text-white">
           {formatDisplayDate(weekDates[0])} - {formatDisplayDate(weekDates[6])}
         </div>
       </div>
 
-      <div className="border border-gray-200 rounded-lg overflow-x-auto">
+      <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-x-auto">
         <div
           className="grid min-w-[700px]"
           style={{ gridTemplateColumns: 'minmax(120px, auto) repeat(7, minmax(80px, 1fr))' }}
         >
           {/* Header row */}
-          <div className="p-2 sm:p-3 bg-gray-100 font-medium text-gray-700 border-b border-r border-gray-200 text-sm">
+          <div className="p-2 sm:p-3 bg-gray-100 dark:bg-gray-800 font-medium text-gray-700 dark:text-gray-300 border-b border-r border-gray-200 dark:border-gray-700 text-sm">
             Car
           </div>
           {weekDates.map((date) => (
             <div
               key={date.toISOString()}
-              className="p-1 sm:p-3 bg-gray-100 font-medium text-gray-700 text-center border-b border-r border-gray-200 last:border-r-0 text-xs sm:text-sm"
+              className="p-1 sm:p-3 bg-gray-100 dark:bg-gray-800 font-medium text-gray-700 dark:text-gray-300 text-center border-b border-r border-gray-200 dark:border-gray-700 last:border-r-0 text-xs sm:text-sm"
             >
               {formatShortDate(date)}
             </div>
@@ -158,7 +158,7 @@ export default function Calendar() {
 
           {/* Car rows */}
           {cars.length === 0 ? (
-            <div className="col-span-8 p-8 text-center text-gray-500">
+            <div className="col-span-8 p-8 text-center text-gray-500 dark:text-gray-400">
               No cars available. Ask an admin to add some cars.
             </div>
           ) : (
@@ -188,9 +188,9 @@ export default function Calendar() {
 
       {blockedMessage && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4 text-gray-900">Car Unavailable</h2>
-            <p className="text-gray-700 mb-6">{blockedMessage}</p>
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Car Unavailable</h2>
+            <p className="text-gray-700 dark:text-gray-300 mb-6">{blockedMessage}</p>
             <div className="flex justify-end">
               <button
                 onClick={() => setBlockedMessage(null)}

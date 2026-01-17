@@ -149,14 +149,14 @@ export default function BookingModal({
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md">
-        <h2 className="text-xl font-bold mb-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+        <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
           {existingBooking ? 'Edit Booking' : 'New Booking'}
         </h2>
 
         {existingBooking && !canEdit && (
-          <div className="mb-4 p-3 bg-yellow-50 text-yellow-800 rounded">
+          <div className="mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 rounded">
             This booking belongs to {existingBooking.profile?.display_name}. You
             can only view it.
           </div>
@@ -165,14 +165,14 @@ export default function BookingModal({
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Car
               </label>
               <select
                 value={selectedCarId}
                 onChange={(e) => setSelectedCarId(e.target.value)}
                 disabled={!canEdit}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 dark:disabled:bg-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
                 {cars.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -181,14 +181,14 @@ export default function BookingModal({
                 ))}
               </select>
               {selectedCarId && cars.find(c => c.id === selectedCarId)?.key_location && (
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                   Key location: {cars.find(c => c.id === selectedCarId)?.key_location}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Date
               </label>
               <input
@@ -196,7 +196,7 @@ export default function BookingModal({
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
                 disabled={!canEdit}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 dark:disabled:bg-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />
             </div>
 
@@ -207,9 +207,9 @@ export default function BookingModal({
                 checked={isWholeDay}
                 onChange={(e) => setIsWholeDay(e.target.checked)}
                 disabled={!canEdit}
-                className="rounded border-gray-300"
+                className="rounded border-gray-300 dark:border-gray-600"
               />
-              <label htmlFor="wholeDay" className="text-sm text-gray-700">
+              <label htmlFor="wholeDay" className="text-sm text-gray-700 dark:text-gray-300">
                 Whole day
               </label>
             </div>
@@ -217,7 +217,7 @@ export default function BookingModal({
             {!isWholeDay && (
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Start Time
                   </label>
                   <input
@@ -225,11 +225,11 @@ export default function BookingModal({
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
                     disabled={!canEdit}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 dark:disabled:bg-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     End Time
                   </label>
                   <input
@@ -237,14 +237,14 @@ export default function BookingModal({
                     value={endTime}
                     onChange={(e) => setEndTime(e.target.value)}
                     disabled={!canEdit}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 dark:disabled:bg-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Destination
               </label>
               <input
@@ -253,12 +253,12 @@ export default function BookingModal({
                 onChange={(e) => setDestination(e.target.value)}
                 placeholder="Where are you going?"
                 disabled={!canEdit}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 dark:disabled:bg-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
               />
             </div>
 
             {error && (
-              <div className="p-3 bg-red-50 text-red-800 rounded">{error}</div>
+              <div className="p-3 bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-200 rounded">{error}</div>
             )}
           </div>
 
@@ -268,7 +268,7 @@ export default function BookingModal({
                 type="button"
                 onClick={handleDelete}
                 disabled={loading}
-                className="px-4 py-2 text-red-600 hover:text-red-800 disabled:opacity-50"
+                className="px-4 py-2 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 disabled:opacity-50"
               >
                 Delete
               </button>
@@ -276,7 +276,7 @@ export default function BookingModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-gray-600 hover:text-gray-800"
+              className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
             >
               {canEdit ? 'Cancel' : 'Close'}
             </button>
