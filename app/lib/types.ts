@@ -2,6 +2,8 @@ export interface Car {
   id: string
   name: string
   key_location: string | null
+  comment: string | null
+  has_alert: boolean
   created_at: string
 }
 

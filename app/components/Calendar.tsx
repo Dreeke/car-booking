@@ -103,49 +103,56 @@ export default function Calendar() {
     )
   }
 
+  const formatShortDate = (date: Date): string => {
+    return date.toLocaleDateString('en-US', {
+      weekday: 'short',
+      day: 'numeric',
+    })
+  }
+
   return (
-    <div className="p-4">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
+    <div className="p-2 sm:p-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+        <div className="flex items-center gap-1 sm:gap-2">
           <button
             onClick={handlePrevWeek}
-            className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
+            className="px-2 sm:px-3 py-1 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 text-sm"
           >
-            &larr; Prev
+            &larr;
           </button>
           <button
             onClick={handleToday}
-            className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
+            className="px-2 sm:px-3 py-1 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 text-sm"
           >
             Today
           </button>
           <button
             onClick={handleNextWeek}
-            className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
+            className="px-2 sm:px-3 py-1 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 text-sm"
           >
-            Next &rarr;
+            &rarr;
           </button>
         </div>
-        <div className="text-lg font-medium">
+        <div className="text-sm sm:text-lg font-medium text-gray-900">
           {formatDisplayDate(weekDates[0])} - {formatDisplayDate(weekDates[6])}
         </div>
       </div>
 
-      <div className="border border-gray-200 rounded-lg overflow-hidden">
+      <div className="border border-gray-200 rounded-lg overflow-x-auto">
         <div
-          className="grid"
-          style={{ gridTemplateColumns: '150px repeat(7, 1fr)' }}
+          className="grid min-w-[700px]"
+          style={{ gridTemplateColumns: '100px repeat(7, minmax(80px, 1fr))' }}
         >
           {/* Header row */}
-          <div className="p-3 bg-gray-100 font-medium text-gray-700 border-b border-r border-gray-200">
+          <div className="p-2 sm:p-3 bg-gray-100 font-medium text-gray-700 border-b border-r border-gray-200 text-sm">
             Car
           </div>
           {weekDates.map((date) => (
             <div
               key={date.toISOString()}
-              className="p-3 bg-gray-100 font-medium text-gray-700 text-center border-b border-r border-gray-200 last:border-r-0"
+              className="p-1 sm:p-3 bg-gray-100 font-medium text-gray-700 text-center border-b border-r border-gray-200 last:border-r-0 text-xs sm:text-sm"
             >
-              {formatDisplayDate(date)}
+              {formatShortDate(date)}
             </div>
           ))}
 
@@ -180,7 +187,7 @@ export default function Calendar() {
       />
 
       {blockedMessage && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <h2 className="text-xl font-bold mb-4 text-gray-900">Car Unavailable</h2>
             <p className="text-gray-700 mb-6">{blockedMessage}</p>
