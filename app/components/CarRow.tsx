@@ -35,7 +35,7 @@ export default function CarRow({
     <div className="contents">
       <div className="p-2 sm:p-3 bg-gray-50 font-medium text-gray-900 border-b border-r border-gray-200 sticky left-0 z-10">
         <div className="flex items-center gap-1">
-          <span className="text-sm sm:text-base truncate">{car.name}</span>
+          <span className="text-sm sm:text-base">{car.name}</span>
           {car.has_alert && (
             <span className="text-amber-500 flex-shrink-0" title="Needs attention">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">

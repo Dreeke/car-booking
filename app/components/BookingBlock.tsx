@@ -48,7 +48,7 @@ export default function BookingBlock({ booking, onClick }: BookingBlockProps) {
         isOwner ? 'ring-2 ring-blue-500 ring-offset-1' : ''
       }`}
     >
-      <div className="font-medium truncate">
+      <div className="font-medium truncate text-gray-900">
         {booking.profile?.display_name || 'Unknown'}
       </div>
       <div className="text-xs text-gray-600">

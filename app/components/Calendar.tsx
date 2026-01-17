@@ -141,7 +141,7 @@ export default function Calendar() {
       <div className="border border-gray-200 rounded-lg overflow-x-auto">
         <div
           className="grid min-w-[700px]"
-          style={{ gridTemplateColumns: '100px repeat(7, minmax(80px, 1fr))' }}
+          style={{ gridTemplateColumns: 'minmax(120px, auto) repeat(7, minmax(80px, 1fr))' }}
         >
           {/* Header row */}
           <div className="p-2 sm:p-3 bg-gray-100 font-medium text-gray-700 border-b border-r border-gray-200 text-sm">
