@@ -246,7 +246,7 @@ export default function CarsPage() {
                         {car.key_location && (
                           <div className="text-sm text-gray-500 dark:text-gray-400">Key: {car.key_location}</div>
                         )}
-                        {isAdmin && car.comment && (
+                        {car.comment && (
                           <div className="text-sm text-gray-400 dark:text-gray-500 italic mt-1">Note: {car.comment}</div>
                         )}
                       </div>

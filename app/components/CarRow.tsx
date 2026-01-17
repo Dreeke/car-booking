@@ -37,7 +37,7 @@ export default function CarRow({
     })
   }
 
-  const hasInfo = car.key_location || car.has_alert || (isAdmin && car.comment)
+  const hasInfo = car.key_location || car.has_alert || car.comment
 
   return (
     <div className="contents">
@@ -80,7 +80,7 @@ export default function CarRow({
                 </div>
               )}
 
-              {isAdmin && car.comment && (
+              {car.comment && (
                 <div className="text-sm text-gray-500 dark:text-gray-400 italic border-t border-gray-200 dark:border-gray-600 pt-2 mt-2">
                   <span className="font-medium not-italic">Note:</span> {car.comment}
                 </div>
