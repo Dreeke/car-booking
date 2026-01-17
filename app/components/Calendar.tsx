@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Car, BookingWithDetails } from '@/app/lib/types'
 import { createClient } from '@/app/lib/supabase'
-import { getWeekDates, formatDisplayDate, addWeeks } from '@/app/lib/date-utils'
+import { getWeekDates, formatDisplayDate, addWeeks, isSameDay } from '@/app/lib/date-utils'
 import CarRow from './CarRow'
 import BookingModal from './BookingModal'
 
@@ -17,6 +17,7 @@ export default function Calendar() {
   const [selectedCar, setSelectedCar] = useState<Car | null>(null)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedBooking, setSelectedBooking] = useState<BookingWithDetails | null>(null)
+  const [blockedMessage, setBlockedMessage] = useState<string | null>(null)
 
   const supabase = createClient()
   const weekDates = getWeekDates(currentDate)
@@ -48,6 +49,22 @@ export default function Calendar() {
   }
 
   function handleCellClick(car: Car, date: Date) {
+    // Check if there's a whole-day booking for this car on this date
+    const wholeDayBooking = bookings.find(
+      (b) =>
+        b.car_id === car.id &&
+        b.is_whole_day &&
+        isSameDay(new Date(b.start_time), date)
+    )
+
+    if (wholeDayBooking) {
+      const bookedBy = wholeDayBooking.profile?.display_name || 'someone'
+      setBlockedMessage(
+        `${car.name} is booked for the whole day by ${bookedBy}. Please contact them if you need to use this car.`
+      )
+      return
+    }
+
     setSelectedCar(car)
     setSelectedDate(date)
     setSelectedBooking(null)
@@ -161,6 +178,23 @@ export default function Calendar() {
         date={selectedDate}
         existingBooking={selectedBooking}
       />
+
+      {blockedMessage && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4 text-gray-900">Car Unavailable</h2>
+            <p className="text-gray-700 mb-6">{blockedMessage}</p>
+            <div className="flex justify-end">
+              <button
+                onClick={() => setBlockedMessage(null)}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
