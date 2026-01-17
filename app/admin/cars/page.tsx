@@ -15,6 +15,7 @@ export default function CarsPage() {
   const [newCarName, setNewCarName] = useState('')
   const [newCarKeyLocation, setNewCarKeyLocation] = useState('')
   const [editingCar, setEditingCar] = useState<Car | null>(null)
+  const [editingStatus, setEditingStatus] = useState<Car | null>(null) // For non-admin status editing
   const [editName, setEditName] = useState('')
   const [editKeyLocation, setEditKeyLocation] = useState('')
   const [editComment, setEditComment] = useState('')
@@ -80,6 +81,28 @@ export default function CarsPage() {
     fetchCars()
   }
 
+  async function handleUpdateCarStatus(e: React.FormEvent) {
+    e.preventDefault()
+    if (!editingStatus) return
+
+    setError('')
+    const { error } = await supabase
+      .from('cars')
+      .update({
+        comment: editComment.trim() || null,
+        has_alert: editHasAlert,
+      })
+      .eq('id', editingStatus.id)
+
+    if (error) {
+      setError(error.message)
+      return
+    }
+
+    cancelEditingStatus()
+    fetchCars()
+  }
+
   async function handleDeleteCar(car: Car) {
     if (!confirm(`Delete "${car.name}"? All bookings for this car will also be deleted.`)) {
       return
@@ -98,8 +121,16 @@ export default function CarsPage() {
 
   function startEditing(car: Car) {
     setEditingCar(car)
+    setEditingStatus(null)
     setEditName(car.name)
     setEditKeyLocation(car.key_location || '')
+    setEditComment(car.comment || '')
+    setEditHasAlert(car.has_alert || false)
+  }
+
+  function startEditingStatus(car: Car) {
+    setEditingStatus(car)
+    setEditingCar(null)
     setEditComment(car.comment || '')
     setEditHasAlert(car.has_alert || false)
   }
@@ -108,6 +139,12 @@ export default function CarsPage() {
     setEditingCar(null)
     setEditName('')
     setEditKeyLocation('')
+    setEditComment('')
+    setEditHasAlert(false)
+  }
+
+  function cancelEditingStatus() {
+    setEditingStatus(null)
     setEditComment('')
     setEditHasAlert(false)
   }
@@ -177,6 +214,7 @@ export default function CarsPage() {
             <ul className="divide-y divide-gray-200 dark:divide-gray-700">
               {cars.map((car) => (
                 <li key={car.id} className="p-4">
+                  {/* Admin full edit form */}
                   {editingCar?.id === car.id ? (
                     <form onSubmit={handleUpdateCar} className="space-y-3">
                       <div className="flex flex-col sm:flex-row gap-3">
@@ -214,7 +252,7 @@ export default function CarsPage() {
                       <textarea
                         value={editComment}
                         onChange={(e) => setEditComment(e.target.value)}
-                        placeholder="Admin notes (not visible to regular users)"
+                        placeholder="Notes about the car (visible to everyone)"
                         rows={2}
                         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                       />
@@ -227,6 +265,47 @@ export default function CarsPage() {
                         />
                         <span className="text-sm text-gray-700 dark:text-gray-300">
                           Alert flag (needs repair/attention)
+                        </span>
+                      </label>
+                    </form>
+                  ) : editingStatus?.id === car.id ? (
+                    /* Non-admin status edit form */
+                    <form onSubmit={handleUpdateCarStatus} className="space-y-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-gray-900 dark:text-white font-medium">{car.name}</span>
+                        <div className="flex gap-2">
+                          <button
+                            type="submit"
+                            className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+                          >
+                            Save
+                          </button>
+                          <button
+                            type="button"
+                            onClick={cancelEditingStatus}
+                            className="px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 text-sm border border-gray-300 dark:border-gray-600 rounded"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                      <textarea
+                        value={editComment}
+                        onChange={(e) => setEditComment(e.target.value)}
+                        placeholder="Add a note (e.g., window doesn't close, low tire pressure...)"
+                        rows={2}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                        autoFocus
+                      />
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={editHasAlert}
+                          onChange={(e) => setEditHasAlert(e.target.checked)}
+                          className="rounded border-gray-300 dark:border-gray-600"
+                        />
+                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                          Flag this car as needing attention
                         </span>
                       </label>
                     </form>
@@ -250,22 +329,31 @@ export default function CarsPage() {
                           <div className="text-sm text-gray-400 dark:text-gray-500 italic mt-1">Note: {car.comment}</div>
                         )}
                       </div>
-                      {isAdmin && (
-                        <div className="flex gap-2">
+                      <div className="flex gap-2">
+                        {isAdmin ? (
+                          <>
+                            <button
+                              onClick={() => startEditing(car)}
+                              className="px-3 py-1 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDeleteCar(car)}
+                              className="px-3 py-1 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 text-sm"
+                            >
+                              Delete
+                            </button>
+                          </>
+                        ) : (
                           <button
-                            onClick={() => startEditing(car)}
-                            className="px-3 py-1 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm"
+                            onClick={() => startEditingStatus(car)}
+                            className="px-3 py-1 text-amber-600 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 text-sm"
                           >
-                            Edit
+                            Report Issue
                           </button>
-                          <button
-                            onClick={() => handleDeleteCar(car)}
-                            className="px-3 py-1 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 text-sm"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                   )}
                 </li>
