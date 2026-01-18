@@ -120,10 +120,10 @@ export default function CarRow({
         return (
           <div
             key={date.toISOString()}
-            className={`p-2 border-b border-r border-gray-200 dark:border-gray-700 min-h-[80px] transition-colors duration-150 ${
+            className={`group p-2 border-b border-r border-gray-200 dark:border-gray-700 min-h-[80px] transition-colors duration-150 ${
               isToday
-                ? 'bg-blue-50 dark:bg-blue-950'
-                : 'bg-white dark:bg-gray-900'
+                ? 'bg-blue-50 dark:bg-blue-950 hover:bg-blue-100 dark:hover:bg-blue-900'
+                : 'bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800'
             }`}
           >
             <div className="space-y-1">
@@ -138,7 +138,7 @@ export default function CarRow({
               ))}
               <button
                 onClick={() => onCellClick(car, date)}
-                className={`w-full py-1 border-2 border-dashed rounded text-sm font-medium transition-colors ${
+                className={`w-full py-1 border-2 border-dashed rounded text-sm font-medium transition-all opacity-0 group-hover:opacity-100 ${
                   isToday
                     ? 'border-blue-300 dark:border-blue-700 text-blue-500 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900'
                     : 'border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-600 dark:hover:text-gray-300'
