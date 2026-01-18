@@ -138,7 +138,7 @@ export default function CarRow({
               ))}
               <button
                 onClick={() => onCellClick(car, date)}
-                className={`w-full py-1 border-2 border-dashed rounded text-sm font-medium transition-all opacity-0 group-hover:opacity-100 ${
+                className={`w-full py-1 border-2 border-dashed rounded text-sm font-medium transition-all opacity-100 sm:opacity-0 sm:group-hover:opacity-100 ${
                   isToday
                     ? 'border-blue-300 dark:border-blue-700 text-blue-500 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900'
                     : 'border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-600 dark:hover:text-gray-300'
