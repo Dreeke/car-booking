@@ -15,15 +15,19 @@ const USER_COLORS = [
   { bg: '#ccfbf1', bgDark: '#134e4a', border: '#5eead4', borderDark: '#115e59' }, // teal
   { bg: '#e0e7ff', bgDark: '#312e81', border: '#a5b4fc', borderDark: '#3730a3' }, // indigo
   { bg: '#fef9c3', bgDark: '#713f12', border: '#fde047', borderDark: '#854d0e' }, // yellow
+  { bg: '#fee2e2', bgDark: '#7f1d1d', border: '#fca5a5', borderDark: '#991b1b' }, // red
+  { bg: '#d1fae5', bgDark: '#064e3b', border: '#6ee7b7', borderDark: '#047857' }, // emerald
+  { bg: '#e0f2fe', bgDark: '#0c4a6e', border: '#7dd3fc', borderDark: '#0369a1' }, // sky
+  { bg: '#fae8ff', bgDark: '#701a75', border: '#f0abfc', borderDark: '#86198f' }, // fuchsia
 ]
 
 function getUserColorIndex(userId: string): number {
-  let hash = 0
+  // Use a better hash function (djb2) with prime multiplier for better distribution
+  let hash = 5381
   for (let i = 0; i < userId.length; i++) {
-    hash = ((hash << 5) - hash) + userId.charCodeAt(i)
-    hash = hash & hash
+    hash = ((hash * 33) ^ userId.charCodeAt(i)) >>> 0
   }
-  return Math.abs(hash) % USER_COLORS.length
+  return hash % USER_COLORS.length
 }
 
 function useDarkMode() {
