@@ -112,10 +112,11 @@ export default function BookingModal({
     )
 
     if (conflicts && conflicts.length > 0) {
-      const conflict = conflicts[0] as { id: string; start_time: string; end_time: string; profile: { display_name: string } | null }
+      const conflict = conflicts[0]
       const conflictStart = new Date(conflict.start_time)
       const conflictEnd = new Date(conflict.end_time)
-      const bookedBy = conflict.profile?.display_name || 'someone'
+      const profile = conflict.profile as { display_name: string }[] | null
+      const bookedBy = profile?.[0]?.display_name || 'someone'
       setError(
         `This car is already booked by ${bookedBy} from ${conflictStart.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} to ${conflictEnd.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} on ${conflictStart.toLocaleDateString()}`
       )
