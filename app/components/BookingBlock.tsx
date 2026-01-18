@@ -81,9 +81,13 @@ export default function BookingBlock({ booking, onClick }: BookingBlockProps) {
         {booking.profile?.display_name || 'Unknown'}
       </div>
       <div className="text-xs text-gray-600 dark:text-gray-300">
-        {booking.is_whole_day
-          ? 'All day'
-          : `${formatTime(startTime)} - ${formatTime(endTime)}`}
+        {booking.is_whole_day ? (
+          <span className="inline-block px-1.5 py-0.5 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 rounded text-xs font-medium">
+            All day
+          </span>
+        ) : (
+          `${formatTime(startTime)} - ${formatTime(endTime)}`
+        )}
       </div>
       {booking.destination && (
         <div className="text-xs text-gray-500 dark:text-gray-400 truncate">

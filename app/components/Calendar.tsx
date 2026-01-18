@@ -118,6 +118,11 @@ export default function Calendar() {
     })
   }
 
+  const today = new Date()
+  const isToday = (date: Date): boolean => {
+    return isSameDay(date, today)
+  }
+
   return (
     <div className="p-2 sm:p-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
@@ -134,12 +139,17 @@ export default function Calendar() {
           >
             Today
           </button>
-          <input
-            type="date"
-            onChange={(e) => handleJumpToDate(e.target.value)}
-            className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            title="Jump to date"
-          />
+          <div className="relative">
+            <input
+              type="date"
+              onChange={(e) => handleJumpToDate(e.target.value)}
+              className="px-2 py-1 pl-16 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              title="Jump to date"
+            />
+            <span className="absolute left-2 top-1/2 -translate-y-1/2 text-xs text-gray-500 dark:text-gray-400 pointer-events-none">
+              Go to:
+            </span>
+          </div>
           <button
             onClick={handleNextWeek}
             className="px-2 sm:px-3 py-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-50 dark:hover:bg-gray-700 text-sm"
@@ -164,9 +174,14 @@ export default function Calendar() {
           {weekDates.map((date) => (
             <div
               key={date.toISOString()}
-              className="p-1 sm:p-3 bg-gray-100 dark:bg-gray-800 font-medium text-gray-700 dark:text-gray-300 text-center border-b border-r border-gray-200 dark:border-gray-700 last:border-r-0 text-xs sm:text-sm"
+              className={`p-1 sm:p-3 font-medium text-center border-b border-r border-gray-200 dark:border-gray-700 last:border-r-0 text-xs sm:text-sm ${
+                isToday(date)
+                  ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+              }`}
             >
               {formatShortDate(date)}
+              {isToday(date) && <span className="ml-1 text-xs">(Today)</span>}
             </div>
           ))}
 

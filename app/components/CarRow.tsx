@@ -115,10 +115,16 @@ export default function CarRow({
       </div>
       {weekDates.map((date) => {
         const dayBookings = getBookingsForDay(date)
+        const today = new Date()
+        const isToday = isSameDay(date, today)
         return (
           <div
             key={date.toISOString()}
-            className="p-2 border-b border-r border-gray-200 dark:border-gray-700 min-h-[80px] hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer bg-white dark:bg-gray-900"
+            className={`p-2 border-b border-r border-gray-200 dark:border-gray-700 min-h-[80px] cursor-pointer transition-colors duration-150 ${
+              isToday
+                ? 'bg-blue-50 dark:bg-blue-950 hover:bg-blue-100 dark:hover:bg-blue-900'
+                : 'bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800'
+            }`}
             onClick={() => onCellClick(car, date)}
           >
             <div className="space-y-1">
