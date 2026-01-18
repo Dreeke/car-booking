@@ -33,6 +33,7 @@ export default function BookingModal({
   const [startTime, setStartTime] = useState('09:00')
   const [endTime, setEndTime] = useState('17:00')
   const [selectedDate, setSelectedDate] = useState('')
+  const [selectedEndDate, setSelectedEndDate] = useState('')
   const [destination, setDestination] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -42,6 +43,7 @@ export default function BookingModal({
       const start = new Date(existingBooking.start_time)
       const end = new Date(existingBooking.end_time)
       setSelectedDate(formatDate(start))
+      setSelectedEndDate(formatDate(end))
       setSelectedCarId(existingBooking.car_id)
       setIsWholeDay(existingBooking.is_whole_day)
       setDestination(existingBooking.destination || '')
@@ -63,6 +65,7 @@ export default function BookingModal({
       }
     } else if (date && car) {
       setSelectedDate(formatDate(date))
+      setSelectedEndDate('')
       setSelectedCarId(car.id)
       setIsWholeDay(false)
       setStartTime('09:00')
@@ -84,12 +87,16 @@ export default function BookingModal({
     setLoading(true)
     setError('')
 
-    const startDateTime = isWholeDay
+    // Determine if this is a multi-day booking
+    const isMultiDay = selectedEndDate && selectedEndDate !== selectedDate
+    const effectiveEndDate = isMultiDay ? selectedEndDate : selectedDate
+
+    const startDateTime = isWholeDay || isMultiDay
       ? new Date(`${selectedDate}T00:00:00`)
       : new Date(`${selectedDate}T${startTime}:00`)
 
-    const endDateTime = isWholeDay
-      ? new Date(`${selectedDate}T23:59:59`)
+    const endDateTime = isWholeDay || isMultiDay
+      ? new Date(`${effectiveEndDate}T23:59:59`)
       : new Date(`${selectedDate}T${endTime}:00`)
 
     if (endDateTime <= startDateTime) {
@@ -129,7 +136,7 @@ export default function BookingModal({
       user_id: user.id,
       start_time: startDateTime.toISOString(),
       end_time: endDateTime.toISOString(),
-      is_whole_day: isWholeDay,
+      is_whole_day: isWholeDay || isMultiDay,
       destination: destination || null,
     }
 
@@ -213,34 +220,58 @@ export default function BookingModal({
               )}
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Date
-              </label>
-              <input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                disabled={!canEdit}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 dark:disabled:bg-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Start Date
+                </label>
+                <input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  disabled={!canEdit}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 dark:disabled:bg-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  End Date <span className="text-gray-400 font-normal">(optional)</span>
+                </label>
+                <input
+                  type="date"
+                  value={selectedEndDate}
+                  onChange={(e) => setSelectedEndDate(e.target.value)}
+                  min={selectedDate}
+                  disabled={!canEdit}
+                  placeholder="Same day"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 dark:disabled:bg-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+              </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="wholeDay"
-                checked={isWholeDay}
-                onChange={(e) => setIsWholeDay(e.target.checked)}
-                disabled={!canEdit}
-                className="rounded border-gray-300 dark:border-gray-600"
-              />
-              <label htmlFor="wholeDay" className="text-sm text-gray-700 dark:text-gray-300">
-                Whole day
-              </label>
-            </div>
+            {(!selectedEndDate || selectedEndDate === selectedDate) && (
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="wholeDay"
+                  checked={isWholeDay}
+                  onChange={(e) => setIsWholeDay(e.target.checked)}
+                  disabled={!canEdit}
+                  className="rounded border-gray-300 dark:border-gray-600"
+                />
+                <label htmlFor="wholeDay" className="text-sm text-gray-700 dark:text-gray-300">
+                  Whole day
+                </label>
+              </div>
+            )}
 
-            {!isWholeDay && (
+            {selectedEndDate && selectedEndDate !== selectedDate && (
+              <div className="p-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded text-sm">
+                Multi-day booking: {Math.ceil((new Date(selectedEndDate).getTime() - new Date(selectedDate).getTime()) / (1000 * 60 * 60 * 24)) + 1} days
+              </div>
+            )}
+
+            {!isWholeDay && (!selectedEndDate || selectedEndDate === selectedDate) && (
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
