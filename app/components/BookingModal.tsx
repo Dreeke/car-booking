@@ -98,6 +98,31 @@ export default function BookingModal({
       return
     }
 
+    // Check for overlapping bookings on the same car
+    const { data: overlapping } = await supabase
+      .from('bookings')
+      .select('id, start_time, end_time, profile:profiles(display_name)')
+      .eq('car_id', selectedCarId)
+      .lt('start_time', endDateTime.toISOString())
+      .gt('end_time', startDateTime.toISOString())
+
+    // Filter out the current booking when editing
+    const conflicts = overlapping?.filter(
+      (b) => !existingBooking || b.id !== existingBooking.id
+    )
+
+    if (conflicts && conflicts.length > 0) {
+      const conflict = conflicts[0] as { id: string; start_time: string; end_time: string; profile: { display_name: string } | null }
+      const conflictStart = new Date(conflict.start_time)
+      const conflictEnd = new Date(conflict.end_time)
+      const bookedBy = conflict.profile?.display_name || 'someone'
+      setError(
+        `This car is already booked by ${bookedBy} from ${conflictStart.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} to ${conflictEnd.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} on ${conflictStart.toLocaleDateString()}`
+      )
+      setLoading(false)
+      return
+    }
+
     const bookingData = {
       car_id: selectedCarId,
       user_id: user.id,

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Car, BookingWithDetails } from '@/app/lib/types'
 import { createClient } from '@/app/lib/supabase'
-import { getWeekDates, formatDisplayDate, addWeeks, isSameDay } from '@/app/lib/date-utils'
+import { getWeekDates, formatDisplayDate, addWeeks, isSameDay, formatDate } from '@/app/lib/date-utils'
 import CarRow from './CarRow'
 import BookingModal from './BookingModal'
 
@@ -91,6 +91,14 @@ export default function Calendar() {
     setCurrentDate(new Date())
   }
 
+  function handleJumpToDate(dateString: string) {
+    if (dateString) {
+      const [year, month, day] = dateString.split('-').map(Number)
+      const date = new Date(year, month - 1, day)
+      setCurrentDate(date)
+    }
+  }
+
   const getBookingsForCar = (carId: string): BookingWithDetails[] => {
     return bookings.filter((b) => b.car_id === carId)
   }
@@ -126,6 +134,12 @@ export default function Calendar() {
           >
             Today
           </button>
+          <input
+            type="date"
+            onChange={(e) => handleJumpToDate(e.target.value)}
+            className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+            title="Jump to date"
+          />
           <button
             onClick={handleNextWeek}
             className="px-2 sm:px-3 py-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-50 dark:hover:bg-gray-700 text-sm"
