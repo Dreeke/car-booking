@@ -87,8 +87,8 @@ export default function BookingModal({
     setLoading(true)
     setError('')
 
-    // Determine if this is a multi-day booking
-    const isMultiDay = selectedEndDate && selectedEndDate !== selectedDate
+    // Determine if this is a multi-day booking (ensure boolean, not empty string)
+    const isMultiDay = Boolean(selectedEndDate && selectedEndDate !== selectedDate)
     const effectiveEndDate = isMultiDay ? selectedEndDate : selectedDate
 
     const startDateTime = isWholeDay || isMultiDay
