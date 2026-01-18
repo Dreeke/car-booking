@@ -30,3 +30,18 @@ body {
 input, select, textarea {
   color-scheme: light dark;
 }
+
+/* Fix date input text color */
+input[type="date"] {
+  color: #111827;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+@media (prefers-color-scheme: dark) {
+  input[type="date"] {
+    color: #ffffff;
+  }
+}
