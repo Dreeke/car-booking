@@ -137,7 +137,7 @@ export default function Calendar() {
           <input
             type="date"
             onChange={(e) => handleJumpToDate(e.target.value)}
-            className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+            className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             title="Jump to date"
           />
           <button
