@@ -3,6 +3,7 @@
 import { useAuth } from '@/app/lib/auth-context'
 import Header from '@/app/components/Header'
 import Calendar from '@/app/components/Calendar'
+import ProfileBanner from '@/app/components/ProfileBanner'
 
 export default function Home() {
   const { loading } = useAuth()
@@ -18,6 +19,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Header />
+      <ProfileBanner />
       <main className="max-w-7xl mx-auto py-6">
         <Calendar />
       </main>

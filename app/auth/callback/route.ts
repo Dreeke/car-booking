@@ -30,8 +30,20 @@ export async function GET(request: Request) {
       }
     )
 
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
+    const { error, data } = await supabase.auth.exchangeCodeForSession(code)
+    if (!error && data.user) {
+      // Check if user needs profile setup
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('profile_completed')
+        .eq('id', data.user.id)
+        .single()
+
+      // Redirect new users to profile setup
+      if (profile && profile.profile_completed === false) {
+        return NextResponse.redirect(`${origin}/profile?setup=true`)
+      }
+
       return NextResponse.redirect(`${origin}${next}`)
     }
   }

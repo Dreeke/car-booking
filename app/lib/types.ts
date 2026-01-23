@@ -12,6 +12,7 @@ export interface Profile {
   display_name: string
   is_admin: boolean
   is_owner: boolean
+  profile_completed: boolean
 }
 
 export interface RecurrenceRule {
