@@ -22,12 +22,12 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!authLoading && (!profile || !profile.is_admin)) {
+    if (!authLoading && (!profile || (!profile.is_admin && !profile.is_owner))) {
       router.push('/')
       return
     }
 
-    if (profile?.is_admin) {
+    if (profile?.is_admin || profile?.is_owner) {
       fetchStats()
     }
   }, [profile, authLoading])
@@ -100,7 +100,7 @@ export default function AdminDashboard() {
     )
   }
 
-  if (!profile?.is_admin) {
+  if (!profile?.is_admin && !profile?.is_owner) {
     return null
   }
 

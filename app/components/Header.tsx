@@ -30,7 +30,7 @@ export default function Header() {
               >
                 Cars
               </Link>
-              {profile?.is_admin && (
+              {(profile?.is_admin || profile?.is_owner) && (
                 <>
                   <Link
                     href="/admin"
@@ -56,7 +56,11 @@ export default function Header() {
                   className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hidden sm:inline"
                 >
                   {profile?.display_name || user.email}
-                  {profile?.is_admin && (
+                  {profile?.is_owner ? (
+                    <span className="ml-2 px-2 py-0.5 text-xs bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded">
+                      Owner
+                    </span>
+                  ) : profile?.is_admin && (
                     <span className="ml-2 px-2 py-0.5 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded">
                       Admin
                     </span>
@@ -100,7 +104,7 @@ export default function Header() {
               >
                 Cars
               </Link>
-              {profile?.is_admin && (
+              {(profile?.is_admin || profile?.is_owner) && (
                 <>
                   <Link
                     href="/admin"

@@ -21,12 +21,12 @@ export default function ManageUsers() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (!authLoading && (!profile || !profile.is_admin)) {
+    if (!authLoading && (!profile || (!profile.is_admin && !profile.is_owner))) {
       router.push('/')
       return
     }
 
-    if (profile?.is_admin) {
+    if (profile?.is_admin || profile?.is_owner) {
       fetchUsers()
     }
   }, [profile, authLoading])
@@ -51,6 +51,12 @@ export default function ManageUsers() {
   async function toggleAdmin(user: ProfileWithEmail) {
     if (user.id === profile?.id) {
       setError("You can't change your own admin status")
+      return
+    }
+
+    // Prevent admins from modifying the owner (unless they are the owner)
+    if (user.is_owner && !profile?.is_owner) {
+      setError("You can't modify the owner's status")
       return
     }
 
@@ -79,7 +85,7 @@ export default function ManageUsers() {
     )
   }
 
-  if (!profile?.is_admin) {
+  if (!profile?.is_admin && !profile?.is_owner) {
     return null
   }
 
@@ -116,11 +122,15 @@ export default function ManageUsers() {
                       )}
                     </div>
                     <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {user.is_admin ? 'Administrator' : 'Member'}
+                      {user.is_owner ? 'Owner' : user.is_admin ? 'Administrator' : 'Member'}
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    {user.is_admin ? (
+                    {user.is_owner ? (
+                      <span className="px-2 py-1 text-xs bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded">
+                        Owner
+                      </span>
+                    ) : user.is_admin ? (
                       <span className="px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded">
                         Admin
                       </span>
@@ -129,13 +139,18 @@ export default function ManageUsers() {
                         Member
                       </span>
                     )}
-                    {user.id !== profile?.id && (
+                    {user.id !== profile?.id && !user.is_owner && (
                       <button
                         onClick={() => toggleAdmin(user)}
                         className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
                       >
                         {user.is_admin ? 'Remove Admin' : 'Make Admin'}
                       </button>
+                    )}
+                    {user.is_owner && profile?.is_owner && user.id !== profile?.id && (
+                      <span className="text-xs text-gray-400 dark:text-gray-500 italic">
+                        Protected
+                      </span>
                     )}
                   </div>
                 </li>

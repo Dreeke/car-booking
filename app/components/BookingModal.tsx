@@ -101,8 +101,8 @@ export default function BookingModal({
 
   if (!isOpen) return null
 
-  const isOwner = existingBooking ? user?.id === existingBooking.user_id : true
-  const canEdit = isOwner || profile?.is_admin
+  const isBookingOwner = existingBooking ? user?.id === existingBooking.user_id : true
+  const canEdit = isBookingOwner || profile?.is_admin || profile?.is_owner
   const isRecurringSeries = existingBooking?.series_id != null
 
   const toggleDay = (day: number) => {

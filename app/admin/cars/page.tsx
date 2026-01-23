@@ -22,7 +22,7 @@ export default function CarsPage() {
   const [editHasAlert, setEditHasAlert] = useState(false)
   const [error, setError] = useState('')
 
-  const isAdmin = profile?.is_admin || false
+  const isAdmin = profile?.is_admin || profile?.is_owner || false
 
   useEffect(() => {
     if (!authLoading) {
