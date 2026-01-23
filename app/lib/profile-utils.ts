@@ -65,14 +65,17 @@ export function isNameTooSimilarToEmail(name: string, email: string | undefined)
   const emailPrefix = email.split('@')[0].toLowerCase()
   const normalizedName = name.toLowerCase().trim()
 
-  // Reject if it exactly matches the email prefix
+  // Reject if it exactly matches the email prefix (e.g., "john.doe" for john.doe@example.com)
   if (normalizedName === emailPrefix) return true
 
-  // Reject if it's just the email prefix with minor changes (dots to spaces, etc.)
-  const nameWithoutSpaces = normalizedName.replace(/\s+/g, '')
+  // Allow names with spaces - those are likely real names like "John Doe"
+  if (normalizedName.includes(' ')) return false
+
+  // Reject single-word names that match the email prefix without punctuation
+  const nameNormalized = normalizedName.replace(/[._]/g, '')
   const emailPrefixNormalized = emailPrefix.replace(/[._]/g, '')
 
-  if (nameWithoutSpaces === emailPrefixNormalized) return true
+  if (nameNormalized === emailPrefixNormalized) return true
 
   return false
 }

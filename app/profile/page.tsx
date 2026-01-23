@@ -63,13 +63,14 @@ function ProfileForm() {
     // Clear the banner dismissal so if they later revert to a bad name, they'll see it
     localStorage.removeItem(BANNER_DISMISSED_KEY)
 
+    // Refresh profile in context before any redirect
+    await refreshProfile()
+
     if (isSetupMode) {
       // Redirect to home after completing setup
       router.push('/')
     } else {
       setMessage({ type: 'success', text: 'Profile updated successfully!' })
-      // Refresh profile in context
-      await refreshProfile()
       setLoading(false)
     }
   }
